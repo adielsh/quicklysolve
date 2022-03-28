@@ -62,6 +62,26 @@ export default {
 
                     this.$store.commit("SET_LOGGEDIN", user);
                     this.$router.push({ path: "/board/" });
+
+        Firebase.db
+        .collection("users")
+       
+
+        //////////////////////
+        //////////////////////
+        .doc(this.$store.state.currentUser.email)
+        .set({
+          userId: this.$store.state.currentUser.email,
+          created_at: new Date(),
+        })
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          alert(error);
+          console.error("Error writing document: ", error);
+        });
+
                     // ...
                   })
                   .catch((error) => {
@@ -86,7 +106,6 @@ export default {
     //  const auth = Firebase.auth.getAuth();
        Firebase.auth().signOut().then(() => {
         // Sign-out successful.
-        alert("success signout")
             console.log(Firebase.auth.currentUser,"***************8")
             this.$router.push("/")
 
