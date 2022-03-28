@@ -14,10 +14,9 @@
                 <v-card style="height:200px;width:200px;" elevation="9" shaped outlined flat tile class="d-flex">
                   <v-card-text >
                       <div>{{user.data.name}}</div>
-                      <div>{{user.id}} מייל</div>
-                      <div>{{user.data.type}} סוג</div>
+                      <div>{{user.id}}</div>
+                      <div>{{user.data.type}}</div>
                       <div v-if="user.data.tags">
-                            
                                <v-chip v-for="(t,i) in user.data.tags" :key="i"
                                   :color="getRandomColor()"
                                   outlined
@@ -82,7 +81,7 @@ export default {
   },
   methods:{
     getRandomColor(){
-      const colors = ["red", "blue", "orange", "green"];
+      const colors = ["red", "blue", "orange", "green","yellow","purple","brown","black"];
 
       const random = Math.floor(Math.random() * colors.length);
       return colors[random]
