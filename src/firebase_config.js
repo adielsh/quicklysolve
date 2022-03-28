@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import store from "./store";
 const config = 
   {
     apiKey: "AIzaSyCWR4AZNjz1mhTl07nZtma3uLjy0UWEeMY",
@@ -11,6 +12,14 @@ const config =
   };
 try {
   firebase.initializeApp(config);
+  //When ever the user authentication state changes write the user to vuex.
+  firebase.auth().onAuthStateChanged((user) =>{
+    if(user){
+        store.commit('SET_LOGGEDIN', user);
+    }else{
+        store.commit('SET_LOGGEDIN', null);
+    }
+  });
 } catch (err) {
   // we skip the "already exists" message which is
   // not an actual error when we're hot-reloading
@@ -19,10 +28,10 @@ try {
   }
 }
 const settings = {};
-export let authInstance = firebase.auth;
 export let db = firebase.firestore();
-export let auth = firebase.auth();
+export let auth = firebase.auth;
 export let fieldPath = firebase.firestore.FieldPath;
 db.settings(settings);
-
-export default { authInstance, auth, db, fieldPath };
+const o = {  auth, db, fieldPath };
+window.Firebase  = o;
+export default  o ;

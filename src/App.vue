@@ -19,16 +19,18 @@
       </div>
 
       <v-spacer></v-spacer>
-      login
-<!-- 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+    
+      <v-btn v-if="!$store.state.currentUser" @click="googleLogin()"
       >
-        <span class="mr-2">quickly solve</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
+        <span class="mr-2">Login with Google</span>
+        <!-- <v-icon>mdi-open-in-new</v-icon> -->
+      </v-btn>   
+      
+      <v-btn v-if="$store.state.currentUser" @click="signOut()"
+      >
+        <span class="mr-2">Logout</span>
+        <!-- <v-icon>mdi-open-in-new</v-icon> -->
+      </v-btn> 
     </v-app-bar>
 
     <v-main>
@@ -38,10 +40,62 @@
 </template>
 
 <script>
+import * as Firebase from "./firebase_config";
 
 export default {
   name: 'App',
+  mounted(){
 
+  },
+  methods:{
+    googleLogin() {
+                var provider = new Firebase.auth.GoogleAuthProvider();
+                Firebase.auth()
+                  .signInWithPopup(provider)
+                  .then((result) => {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    var token = result.credential.accessToken;
+                    // The signed-in user info.
+                    var user = result.user;
+                    console.log(token, user);
+                    console.log(Firebase.auth().currentUser,"***************8")
+
+                    this.$store.commit("SET_LOGGEDIN", user);
+                    this.$router.push({ path: "/board/" });
+                    // ...
+                  })
+                  .catch((error) => {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // The email of the user's account used.
+                    var email = error.email;
+                    // The firebase.auth.AuthCredential type that was used.
+                    var credential = error.credential;
+                    console.error(errorCode, email, credential, errorMessage);
+
+                    alert("Oops. " + errorMessage);
+                    // ...
+                  });
+    
+    
+    
+    
+    },
+    signOut(){
+    //  const auth = Firebase.auth.getAuth();
+       Firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+        alert("success signout")
+            console.log(Firebase.auth.currentUser,"***************8")
+            this.$router.push("/")
+
+      }).catch((error) => {
+        // An error happened.
+        alert("error signout: " + error)
+      });
+    }
+  },
   data: () => ({
     //
   }),

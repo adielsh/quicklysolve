@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import store from "../store";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,9 @@ const routes = [
   {
     path: '/board',
     name: 'board',
+    meta: {
+      requiresAuth: true,
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -33,5 +37,16 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
+router.beforeEach((to, from, next) => {
+  const currentUser = store.state.currentUser;
+  // const currentUser = true;
+
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && !currentUser) next("login");
+  else next();
+});
 
 export default router
