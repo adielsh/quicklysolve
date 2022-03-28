@@ -8,7 +8,8 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     currentUser : null,
-    isLogin : false
+    isLogin : false,
+    appTitle:"qs"
   },
   getters: {
   },

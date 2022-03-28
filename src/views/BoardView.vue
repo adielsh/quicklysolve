@@ -11,12 +11,21 @@
                 class="d-flex child-flex"
                 cols="4"
               >
-                <v-card style="border: 1px solid" flat tile class="d-flex">
-                  <div style="height:200px;width:200px;">
-                      <div>{{user.name}} שם</div>
-                      <div>{{user.email}} מייל</div>
-                      <div>{{user.type}} סוג</div>
-                  </div>
+                <v-card style="height:200px;width:200px;" elevation="9" shaped
+  outlined flat tile class="d-flex">
+                  <v-card-text >
+                      <div>{{user.data.name}}</div>
+                      <div>{{user.id}} מייל</div>
+                      <div>{{user.data.type}} סוג</div>
+                      <div v-if="user.data.tags">
+                            
+                               <v-chip v-for="(t,i) in user.data.tags" :key="i"
+                                  color="orange"
+                                  outlined
+                                >{{t.label}}</v-chip>
+                      </div>
+                     
+                  </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
@@ -40,10 +49,36 @@ export default {
       .where("type", "==","TEACHER" )
       .onSnapshot((querySnapshot) => {
         this.users = [];
-        console.log(querySnapshot)
+        // console.log(querySnapshot)
         querySnapshot.forEach((doc) => {
+          console.log(doc)
           console.log(doc.data())
-         this.users.push(doc.data())
+          if(!doc.data().tags){
+            this.users.push({id: doc.id ,data : doc.data()})
+              return
+          } 
+          var tags = []
+          doc.data().tags.forEach((val,key,arr)=>{
+          Firebase.db
+           .collection("tags").doc(val).get().then(result=>{
+             console.log(result.data())
+             tags.push(result.data())
+             if (Object.is(arr.length - 1, key)) {
+                  let o ={id: doc.id ,data : doc.data()}
+                  o.data.tags = tags
+                  this.users.push(o)
+             } 
+            })
+
+
+            //  Firebase.db
+            //  .collection("tags")
+            //  .where("id", "==", it )
+            //  .get().then(result=>{
+            //   console.log(result)
+            //  })
+           
+          })
         });
       });
   },
