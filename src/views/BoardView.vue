@@ -11,8 +11,7 @@
                 class="d-flex child-flex"
                 cols="4"
               >
-                <v-card style="height:200px;width:200px;" elevation="9" shaped
-  outlined flat tile class="d-flex">
+                <v-card style="height:200px;width:200px;" elevation="9" shaped outlined flat tile class="d-flex">
                   <v-card-text >
                       <div>{{user.data.name}}</div>
                       <div>{{user.id}} מייל</div>
@@ -20,7 +19,7 @@
                       <div v-if="user.data.tags">
                             
                                <v-chip v-for="(t,i) in user.data.tags" :key="i"
-                                  color="orange"
+                                  :color="getRandomColor()"
                                   outlined
                                 >{{t.label}}</v-chip>
                       </div>
@@ -51,17 +50,16 @@ export default {
         this.users = [];
         // console.log(querySnapshot)
         querySnapshot.forEach((doc) => {
-          console.log(doc)
+         
           console.log(doc.data())
           if(!doc.data().tags){
-            this.users.push({id: doc.id ,data : doc.data()})
-              return
+              this.users.push({id: doc.id ,data : doc.data()})
+              return;
           } 
           var tags = []
           doc.data().tags.forEach((val,key,arr)=>{
           Firebase.db
            .collection("tags").doc(val).get().then(result=>{
-             console.log(result.data())
              tags.push(result.data())
              if (Object.is(arr.length - 1, key)) {
                   let o ={id: doc.id ,data : doc.data()}
@@ -82,6 +80,14 @@ export default {
         });
       });
   },
+  methods:{
+    getRandomColor(){
+      const colors = ["red", "blue", "orange", "green"];
+
+      const random = Math.floor(Math.random() * colors.length);
+      return colors[random]
+    }
+  }
 
 }
 </script>
