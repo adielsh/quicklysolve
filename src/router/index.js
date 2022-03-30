@@ -1,15 +1,24 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import store from "../store";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from '../store';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: () =>
+      import(/* webpackChunkName: "board" */ '../views/BoardView.vue'),
+  },
+  {
+    path: '/myprofile',
+    name: 'myprofile',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/MyProfile.vue'),
   },
   {
     path: '/about',
@@ -17,7 +26,8 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
   },
   {
     path: '/board',
@@ -28,16 +38,16 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "board" */ '../views/BoardView.vue')
-  }
-]
+    component: () =>
+      import(/* webpackChunkName: "board" */ '../views/BoardView.vue'),
+  },
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
-})
-
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
   const currentUser = store.state.currentUser;
@@ -45,8 +55,8 @@ router.beforeEach((to, from, next) => {
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (requiresAuth && !currentUser) next("login");
+  if (requiresAuth && !currentUser) next('login');
   else next();
 });
 
-export default router
+export default router;

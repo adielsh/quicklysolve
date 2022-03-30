@@ -1,18 +1,19 @@
- <template>
+<template>
   <div>
-    <v-app-bar color="primary" dark  fixed>
-    
+    <v-app-bar color="primary" dark fixed>
       <v-btn v-if="isLogin" @click.stop="drawer = !drawer" icon>
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <!-- <v-toolbar-title style="text-align:center">{{appTitle }}</v-toolbar-title> -->
-      <v-btn v-if="!$store.state.currentUser" @click="googleLogin()">SignIn with Google</v-btn>
+      <v-btn v-if="!$store.state.currentUser" @click="googleLogin()"
+        >SignIn with Google</v-btn
+      >
       <v-btn v-if="!!$store.state.currentUser" @click="signOut()">Logout</v-btn>
       <!--<v-toolbar-side-icon></v-toolbar-side-icon>-->
     </v-app-bar>
 
-    <v-layout v-if="isLogin"  wrap>
+    <v-layout v-if="isLogin" wrap>
       <v-navigation-drawer v-model="drawer" absolute temporary>
         <v-list class="pa-1">
           <v-list-item>
@@ -45,16 +46,17 @@
 </template>
 
 <script>
-import * as Firebase from "../firebase_config";
+import * as Firebase from '../firebase_config';
 
 export default {
   data() {
     return {
       drawer: false,
       items: [
-        { title: "ראשי", icon: "mdi-clipboard-edit", route: "home" },
-        { title: "אודות", icon: "mdi-progress-question", route: "about" },
-        { title: "ניתוק מהמערכת", icon: "mdi-logout", route: "logout" },
+        { title: 'ראשי', icon: 'mdi-clipboard-edit', route: 'board' },
+        { title: 'הפרופיל שלי', icon: 'mdi-pencil', route: 'myprofile' },
+        { title: 'אודות', icon: 'mdi-progress-question', route: 'about' },
+        { title: 'ניתוק מהמערכת', icon: 'mdi-logout', route: 'logout' },
       ],
       right: null,
       mini: true,
@@ -71,77 +73,74 @@ export default {
       return this.$store.state.currentUser.email;
     },
   },
-  name: "header-component",
+  name: 'header-component',
   methods: {
-  googleLogin() {
-                var provider = new Firebase.auth.GoogleAuthProvider();
-                Firebase.auth()
-                  .signInWithPopup(provider)
-                  .then((result) => {
-                    // This gives you a Google Access Token. You can use it to access the Google API.
-                    var token = result.credential.accessToken;
-                    // The signed-in user info.
-                    var user = result.user;
-                    console.log(token, user);
-                    console.log(Firebase.auth().currentUser,"***************8")
+    googleLogin() {
+      var provider = new Firebase.auth.GoogleAuthProvider();
+      Firebase.auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+          console.log(token, user);
+          console.log(Firebase.auth().currentUser, '***************8');
 
-                    this.$store.commit("SET_LOGGEDIN", user);
-                    this.$router.push({ path: "/board" });
+          this.$store.commit('SET_LOGGEDIN', user);
+          this.$router.push({ path: '/board' });
 
-        Firebase.db
-        .collection("users")
-       
+          Firebase.db
+            .collection('users')
 
-        //////////////////////
-        //////////////////////
-        .doc(this.$store.state.currentUser.email)
-        .set({
-          userId: this.$store.state.currentUser.email,
-          created_at: new Date(),
-        })
-        .then(() => {
-          console.log("Document successfully written!");
+            //////////////////////
+            //////////////////////
+            .doc(this.$store.state.currentUser.email)
+            .set({
+              userId: this.$store.state.currentUser.email,
+              created_at: new Date(),
+            })
+            .then(() => {
+              console.log('Document successfully written!');
+            })
+            .catch((error) => {
+              alert(error);
+              console.error('Error writing document: ', error);
+            });
+
+          // ...
         })
         .catch((error) => {
-          alert(error);
-          console.error("Error writing document: ", error);
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          console.error(errorCode, email, credential, errorMessage);
+
+          alert('Oops. ' + errorMessage);
+          // ...
         });
-
-                    // ...
-                  })
-                  .catch((error) => {
-                    // Handle Errors here.
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    // The email of the user's account used.
-                    var email = error.email;
-                    // The firebase.auth.AuthCredential type that was used.
-                    var credential = error.credential;
-                    console.error(errorCode, email, credential, errorMessage);
-
-                    alert("Oops. " + errorMessage);
-                    // ...
-                  });
-    
-    
-    
-    
     },
-    signOut(){
-    //  const auth = Firebase.auth.getAuth();
-       Firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-            console.log(Firebase.auth.currentUser,"***************8")
-            this.$router.push("/")
-
-      }).catch((error) => {
-        // An error happened.
-        alert("error signout: " + error)
-      });
+    signOut() {
+      //  const auth = Firebase.auth.getAuth();
+      Firebase.auth()
+        .signOut()
+        .then(() => {
+          // Sign-out successful.
+          console.log(Firebase.auth.currentUser, '***************8');
+          this.$router.push('/');
+        })
+        .catch((error) => {
+          // An error happened.
+          alert('error signout: ' + error);
+        });
     },
     route(item) {
-      this.$router.push({ path: "/" + item.route + "/" });
-      if (item.route === "logout") {
+      this.$router.push({ path: '/' + item.route + '/' });
+      if (item.route === 'logout') {
         this.signOut();
       }
     },
