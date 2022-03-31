@@ -32,3 +32,9 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+![example workflow](https://github.com/adielsh/quicklysolve/actions/workflows/firebase-hosting-merge.yml/badge.svg)
+![example workflow](https://github.com/adielsh/quicklysolve/actions/workflows/firebase-hosting-pull-request.yml/badge.svg)
+
+
+
