@@ -10,7 +10,6 @@
     </v-row>
     <v-form ref="form" lazy-validation>
       <v-combobox
-        
         :items="$store.state.tags"
         chips
         label="תגים"
@@ -38,6 +37,7 @@ export default {
         console.log(doc.data(), '**********');
         this.profile = doc.data();
       });
+    this.getTags();
   },
   methods: {
     async getTags() {

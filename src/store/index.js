@@ -15,6 +15,7 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     SET_TAG(state, tag) {
+      console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
       state.tags.push(tag);
     },
     SET_LOGGEDIN(state, currentUser) {
