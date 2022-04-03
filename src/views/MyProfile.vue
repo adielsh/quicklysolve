@@ -8,33 +8,17 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
-
-      <v-select
-        v-model="value"
+    <v-form ref="form" lazy-validation>
+      <v-combobox
+        
         :items="$store.state.tags"
         chips
         label="תגים"
         multiple
         solo
-      ></v-select>
+      ></v-combobox>
 
-   
-
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-        Validate
-      </v-btn>
-
-      <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
-
-      <v-btn color="warning" @click="resetValidation"> Reset Validation </v-btn>
+      <v-btn color="success" class="mr-4" @click=""> Validate </v-btn>
     </v-form>
   </v-container>
 </template>
@@ -56,20 +40,11 @@ export default {
       });
   },
   methods: {
-    getRandomColor() {
-      const colors = [
-        'red',
-        'blue',
-        'orange',
-        'green',
-        'yellow',
-        'purple',
-        'brown',
-        'black',
-      ];
-
-      const random = Math.floor(Math.random() * colors.length);
-      return colors[random];
+    async getTags() {
+      const snapshot = await Firebase.db.collection('tags').get();
+      return snapshot.docs.forEach((doc) => {
+        this.$store.commit('SET_TAG', doc.id);
+      });
     },
   },
 };

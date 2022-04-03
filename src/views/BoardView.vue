@@ -30,7 +30,7 @@
                         :key="i"
                         :color="getRandomColor()"
                         outlined
-                        >{{ t.label }}</v-chip
+                        >{{ t }}</v-chip
                       >
                     </div>
                   </v-card-text>
@@ -72,7 +72,7 @@ export default {
               .doc(val)
               .get()
               .then((result) => {
-                tags.push(result.data());
+                tags.push(result.id);
                 if (Object.is(arr.length - 1, key)) {
                   let o = { id: doc.id, data: doc.data() };
                   o.data.tags = tags;
