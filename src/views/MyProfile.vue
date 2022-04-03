@@ -26,7 +26,7 @@
 
       <v-select
         v-model="value"
-        :items="profile.tags"
+        :items="$store.state.tags"
         chips
         label="תגים"
         multiple
