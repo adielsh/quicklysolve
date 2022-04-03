@@ -4,20 +4,21 @@
       <v-col cols="12" sm="12" offset-sm="12">
         <v-card-title>ניהול פרופיל</v-card-title>
         <v-card class="wrap-cards">
-          {{ profile }}
+          {{ profile.userId }}
         </v-card>
       </v-col>
     </v-row>
     <v-form ref="form" lazy-validation>
       <v-combobox
-        :items="$store.state.tags"
+        :items="$store.state.allTags"
+        v-model="userUpdatedTags"
         chips
         label="תגים"
         multiple
         solo
       ></v-combobox>
 
-      <v-btn color="success" class="mr-4" @click=""> Validate </v-btn>
+      <v-btn color="success" class="mr-4" @click="saveProfile"> שמור </v-btn>
     </v-form>
   </v-container>
 </template>
@@ -27,6 +28,7 @@ import * as Firebase from '../firebase_config';
 export default {
   data: () => ({
     profile: {},
+    userUpdatedTags: [],
   }),
   async mounted() {
     Firebase.db
@@ -36,13 +38,41 @@ export default {
       .then((doc) => {
         console.log(doc.data(), '**********');
         this.profile = doc.data();
+        this.userUpdatedTags = this.profile.tags;
       });
     this.getTags();
   },
   methods: {
+    saveProfile() {
+      // console.log( a2.filter(x => !a1.includes(x)) );
+      let tagsToAddToGlobal = this.profile.tags.filter(
+        (x) => !this.userUpdatedTags.includes(x)
+      );
+      tagsToAddToGlobal.forEach((it) => {
+        // Add a new document in collection "cities"
+        db.collection('tags')
+          .doc(it)
+          .set({})
+          .then(() => {
+            console.log('Document successfully written!');
+          })
+          .catch((error) => {
+            console.error('Error writing document: ', error);
+          });
+      });
+      console.log(this.tagsToAddToGlobal);
+      console.log(this.userUpdatedTags);
+      Firebase.db.collection('users').doc(this.profile.userId).set(
+        {
+          tags: this.userUpdatedTags,
+        },
+        { merge: true }
+      );
+    },
     async getTags() {
       const snapshot = await Firebase.db.collection('tags').get();
       return snapshot.docs.forEach((doc) => {
+        console.log(doc.id);
         this.$store.commit('SET_TAG', doc.id);
       });
     },

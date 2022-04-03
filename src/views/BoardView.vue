@@ -51,7 +51,6 @@ export default {
     users: [],
   }),
   async mounted() {
-    this.getAllTags();
 
     Firebase.db
       .collection('users')

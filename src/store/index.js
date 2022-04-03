@@ -10,13 +10,12 @@ export default new Vuex.Store({
     currentUser: null,
     isLogin: false,
     appTitle: 'qs',
-    tags: [],
+    allTags: [],
   },
   getters: {},
   mutations: {
     SET_TAG(state, tag) {
-      console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-      state.tags.push(tag);
+      state.allTags.push(tag);
     },
     SET_LOGGEDIN(state, currentUser) {
       state.currentUser = currentUser;
