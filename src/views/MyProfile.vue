@@ -45,12 +45,12 @@ export default {
   methods: {
     saveProfile() {
       // console.log( a2.filter(x => !a1.includes(x)) );
-      let tagsToAddToGlobal = this.profile.tags.filter(
-        (x) => !this.userUpdatedTags.includes(x)
+      var tagsToAddToGlobal = this.userUpdatedTags.filter(
+        (x) => !this.$store.state.allTags.includes(x)
       );
       tagsToAddToGlobal.forEach((it) => {
         // Add a new document in collection "cities"
-        db.collection('tags')
+       Firebase. db.collection('tags')
           .doc(it)
           .set({})
           .then(() => {
@@ -60,7 +60,7 @@ export default {
             console.error('Error writing document: ', error);
           });
       });
-      console.log(this.tagsToAddToGlobal);
+      console.log(tagsToAddToGlobal);
       console.log(this.userUpdatedTags);
       Firebase.db.collection('users').doc(this.profile.userId).set(
         {
