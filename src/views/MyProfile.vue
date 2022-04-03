@@ -17,13 +17,6 @@
         required
       ></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field>
-
       <v-select
         v-model="value"
         :items="$store.state.tags"
@@ -33,12 +26,7 @@
         solo
       ></v-select>
 
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[(v) => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
+   
 
       <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
         Validate
