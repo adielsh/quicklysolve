@@ -4,6 +4,8 @@
       <v-btn v-if="isLogin" @click.stop="drawer = !drawer" icon>
         <v-icon>mdi-menu</v-icon>
       </v-btn>
+      QuickSolve
+
       <v-spacer></v-spacer>
       <!-- <v-toolbar-title style="text-align:center">{{appTitle }}</v-toolbar-title> -->
       <v-btn v-if="!$store.state.currentUser" @click="googleLogin()"

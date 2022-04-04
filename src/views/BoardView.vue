@@ -9,8 +9,8 @@
                 v-for="(user, i) in users"
                 :key="i"
                 class="d-flex child-flex"
-                cols="4"
-                sm="12"
+                cols="12"
+                xs="12"
               >
                 <v-card
                   style="height: 200px; width: 200px"
