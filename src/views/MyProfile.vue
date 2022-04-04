@@ -23,7 +23,6 @@
         :items="$store.state.allTags"
         v-model="userUpdatedTags"
         chips
-        filled
         label="תגים"
         multiple
         solo
@@ -50,6 +49,7 @@ export default {
         console.log(doc.data(), '**********');
         this.profile = doc.data();
         this.userUpdatedTags = this.profile.tags;
+        console.log(this.userUpdatedTags, '&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
     this.getTags();
   },

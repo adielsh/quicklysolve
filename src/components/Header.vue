@@ -96,7 +96,7 @@ export default {
             //////////////////////
             //////////////////////
             .doc(this.$store.state.currentUser.email)
-            .set({
+            .update({
               userId: this.$store.state.currentUser.email,
               created_at: new Date(),
             })
