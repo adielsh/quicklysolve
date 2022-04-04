@@ -2,17 +2,28 @@
   <v-container>
     <v-row style="margin-top: 60px">
       <v-col cols="12" sm="12" offset-sm="12">
-        <v-card-title>ניהול פרופיל</v-card-title>
         <v-card class="wrap-cards">
-          {{ profile.userId }}
+          <v-card-title>ניהול פרופיל</v-card-title>
         </v-card>
       </v-col>
     </v-row>
     <v-form ref="form" lazy-validation>
+      <v-text-field
+        label="מזהה משתמש"
+        v-model="profile.userId"
+        hide-details="auto"
+        disabled
+      ></v-text-field>
+      <v-text-field
+        label="שם משתמש"
+        v-model="profile.name"
+        hide-details="auto"
+      ></v-text-field>
       <v-combobox
         :items="$store.state.allTags"
         v-model="userUpdatedTags"
         chips
+        filled
         label="תגים"
         multiple
         solo
@@ -50,7 +61,8 @@ export default {
       );
       tagsToAddToGlobal.forEach((it) => {
         // Add a new document in collection "cities"
-       Firebase. db.collection('tags')
+        Firebase.db
+          .collection('tags')
           .doc(it)
           .set({})
           .then(() => {
@@ -62,8 +74,9 @@ export default {
       });
       console.log(tagsToAddToGlobal);
       console.log(this.userUpdatedTags);
-      Firebase.db.collection('users').doc(this.profile.userId).set(
+      Firebase.db.collection('users').doc(this.profile.userId).update(
         {
+          name: this.profile.name,
           tags: this.userUpdatedTags,
         },
         { merge: true }

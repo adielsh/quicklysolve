@@ -51,7 +51,6 @@ export default {
     users: [],
   }),
   async mounted() {
-
     Firebase.db
       .collection('users')
       .where('type', '==', 'TEACHER')
