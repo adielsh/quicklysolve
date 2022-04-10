@@ -25,8 +25,28 @@
         chips
         label="תגים"
         multiple
-        solo
-      ></v-combobox>
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            class="ma-2"
+            close
+            label
+            outlined
+            :key="JSON.stringify(data.item)"
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            close
+            @click:close="data.parent.selectItem(data.item)"
+          >
+            <!-- <v-avatar
+              class="accent white--text"
+              left
+              v-text="data.item.slice(0, 1).toUpperCase()"
+            ></v-avatar> -->
+            {{ data.item }}
+          </v-chip>
+        </template>
+      </v-combobox>
       <v-switch
         v-model="profile.isBusy"
         label="האם תפוס"
@@ -85,7 +105,21 @@ export default {
         .doc(this.profile.userId)
         .update(this.profile, { merge: true });
     },
+    getRandomColor() {
+      const colors = [
+        'red',
+        'blue',
+        'orange',
+        'green',
+        'yellow',
+        'purple',
+        'brown',
+        'black',
+      ];
 
+      const random = Math.floor(Math.random() * colors.length);
+      return colors[random];
+    },
   },
 };
 </script>

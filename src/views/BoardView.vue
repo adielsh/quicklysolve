@@ -19,7 +19,28 @@
                   label="חיפוש לפי תגים"
                   multiple
                   solo
-                ></v-combobox>
+                >
+                  <template v-slot:selection="data">
+                    <v-chip
+                      class="ma-2"
+                      close
+                      label
+                      outlined
+                      :key="JSON.stringify(data.item)"
+                      v-bind="data.attrs"
+                      :input-value="data.selected"
+                      close
+                      @click:close="data.parent.selectItem(data.item)"
+                    >
+                      <!-- <v-avatar
+              class="accent white--text"
+              left
+              v-text="data.item.slice(0, 1).toUpperCase()"
+            ></v-avatar> -->
+                      {{ data.item }}
+                    </v-chip>
+                  </template>
+                </v-combobox>
               </v-col>
               <v-col
                 v-for="(user, i) in filteredTeachers"
