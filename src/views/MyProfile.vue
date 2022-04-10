@@ -49,8 +49,8 @@
       </v-combobox>
       <v-switch
         v-model="profile.isBusy"
-        label="האם תפוס"
-        color="success"
+        :label="profile.isBusy ? 'תפוס' : 'פנוי'"
+        :color="getSwitchColor"
         hide-details
       ></v-switch>
 
@@ -61,11 +61,18 @@
 
 <script>
 import * as Firebase from '../firebase_config';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 export default {
   data: () => ({
     profile: {},
     userUpdatedTags: [],
   }),
+  computed: {
+    getSwitchColor() {
+      this.profile.isBusy ? 'error' : 'success';
+    },
+  },
   async mounted() {
     Firebase.db
       .collection('users')
@@ -103,7 +110,24 @@ export default {
       Firebase.db
         .collection('users')
         .doc(this.profile.userId)
-        .update(this.profile, { merge: true });
+        .update(
+          { ...this.profile, tags: this.userUpdatedTags },
+          { merge: true }
+        )
+        .then(() => {
+          Toastify({
+            text: 'נשמר',
+            duration: 1000,
+            newWindow: true,
+            gravity: 'top', // `top` or `bottom`
+            position: 'center', // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: 'green',
+            },
+            onClick: function () {}, // Callback after click
+          }).showToast();
+        });
     },
     getRandomColor() {
       const colors = [

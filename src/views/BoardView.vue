@@ -60,7 +60,6 @@
                 >
                   <v-card-title>
                     <div class="text-center">
-                      {{ user.data.name }}
                       <v-badge
                         :color="user.data.isBusy ? 'green' : 'red'"
                         content=""
@@ -70,6 +69,7 @@
                       >
                         <v-icon color="grey lighten-1" xs> mdi-account </v-icon>
                       </v-badge>
+                      {{ user.data.name }}
                     </div>
                   </v-card-title>
                   <v-card-text>
