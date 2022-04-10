@@ -67,7 +67,9 @@
                         transition="slide-x-transition"
                         overlap
                       >
-                        <v-icon color="grey lighten-1" xs> mdi-account </v-icon>
+                        <v-avatar color="blue">
+                          <v-icon dark> mdi-account-circle </v-icon>
+                        </v-avatar>
                       </v-badge>
                       {{ user.data.name }}
                     </div>
