@@ -5,8 +5,24 @@
         <v-card class="wrap-cards">
           <v-container fluid>
             <v-row>
+              <v-col cols="12" md="4">
+                <!-- <v-text-field
+                  label="חיפוש לפי תג"
+                  v-model="searchStr"
+                  clearable
+                ></v-text-field> -->
+
+                <v-combobox
+                  :items="$store.state.allTags"
+                  v-model="desiredTags"
+                  chips
+                  label="חיפוש לפי תגים"
+                  multiple
+                  solo
+                ></v-combobox>
+              </v-col>
               <v-col
-                v-for="(user, i) in users"
+                v-for="(user, i) in filteredTeachers"
                 :key="i"
                 class="d-flex child-flex"
                 cols="12"
@@ -89,7 +105,9 @@ import * as Firebase from '../firebase_config';
 export default {
   data: () => ({
     users: [],
+    teachers: [],
     show: false,
+    desiredTags: [],
   }),
   async mounted() {
     Firebase.db
@@ -101,7 +119,7 @@ export default {
         querySnapshot.forEach((doc) => {
           console.log(doc.data());
           if (!doc.data().tags) {
-            this.users.push({ id: doc.id, data: doc.data() });
+            this.teachers.push({ id: doc.id, data: doc.data() });
             return;
           }
           var tags = [];
@@ -116,7 +134,7 @@ export default {
                   let o = { id: doc.id, data: doc.data() };
                   o.data.tags = tags;
                   o.data.showDetails = false;
-                  this.users.push(o);
+                  this.teachers.push(o);
                 }
               });
 
@@ -131,6 +149,16 @@ export default {
       });
   },
   methods: {
+    // fiterByTag(val) {
+    //   this.filteredTeachers = this.teachers;
+    //   this.filteredTeachers = this.teachers.filter((it) => {
+    //     return it.data.tags.includes(val);
+    //     // return !it.data.tags.forEach((tag) => {
+    //     //   return tag.indexOf(val) > -1;
+    //     // });
+    //     //return !it.id.indexOf(val);
+    //   });
+    // },
     getAllTags() {
       //todo: get all tags for db
     },
@@ -148,6 +176,18 @@ export default {
 
       const random = Math.floor(Math.random() * colors.length);
       return colors[random];
+    },
+  },
+  computed: {
+    filteredTeachers() {
+      var that = this;
+      return this.teachers.filter((t) => {
+        return that.desiredTags.every((v) => t.data.tags.includes(v));
+        // return t.data.tags.forEach((tag) => {
+        //   return tag.indexOf(this.searchStr) > -1;
+        // });
+        return true;
+      });
     },
   },
 };

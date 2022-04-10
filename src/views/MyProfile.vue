@@ -57,7 +57,7 @@ export default {
         this.userUpdatedTags = this.profile.tags;
         console.log(this.userUpdatedTags, '&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
-    this.getTags();
+    // this.getTags();
   },
   methods: {
     saveProfile() {
@@ -85,13 +85,7 @@ export default {
         .doc(this.profile.userId)
         .update(this.profile, { merge: true });
     },
-    async getTags() {
-      const snapshot = await Firebase.db.collection('tags').get();
-      return snapshot.docs.forEach((doc) => {
-        console.log(doc.id);
-        this.$store.commit('SET_TAG', doc.id);
-      });
-    },
+
   },
 };
 </script>

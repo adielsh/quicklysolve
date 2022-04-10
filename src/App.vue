@@ -11,8 +11,18 @@ import HeaderComponent from './components/Header';
 export default {
   name: 'App',
   components: { HeaderComponent },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getTags();
+  },
+  methods: {
+    async getTags() {
+      const snapshot = await Firebase.db.collection('tags').get();
+      return snapshot.docs.forEach((doc) => {
+        console.log(doc.id);
+        this.$store.commit('SET_TAG', doc.id);
+      });
+    },
+  },
   data: () => ({
     //
   }),
