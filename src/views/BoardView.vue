@@ -13,17 +13,17 @@
                 xs="12"
               >
                 <v-card
-                  style="height: 200px; width: 200px"
+                  class="mx-auto"
+                  max-width="500"
                   elevation="9"
                   shaped
                   outlined
                   flat
                   tile
-                  class="d-flex"
                 >
-                  <v-card-text>
-                    <div>{{ user.data.name }}</div>
+                  <v-card-title>
                     <div class="text-center">
+                      {{ user.data.name }}
                       <v-badge
                         :color="user.data.isBusy ? 'green' : 'red'"
                         content=""
@@ -34,9 +34,9 @@
                         <v-icon color="grey lighten-1" xs> mdi-account </v-icon>
                       </v-badge>
                     </div>
-                    <div>{{ user.data.isBusy }}</div>
-                    <div>{{ user.id }}</div>
-                    <div>{{ user.data.type }}</div>
+                  </v-card-title>
+                  <v-card-text>
+                    <div class="text-center"></div>
                     <div v-if="user.data.tags">
                       <v-chip
                         style="margin: 3px"
@@ -48,6 +48,32 @@
                       >
                     </div>
                   </v-card-text>
+
+                  <v-card-actions>
+                    <v-btn color="orange lighten-2" text> פרטים </v-btn>
+
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                      icon
+                      @click="user.data.showDetails = !user.data.showDetails"
+                    >
+                      <v-icon>{{
+                        user.data.showDetails
+                          ? 'mdi-chevron-up'
+                          : 'mdi-chevron-down'
+                      }}</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                  <v-expand-transition>
+                    <div v-show="user.data.showDetails">
+                      <v-divider></v-divider>
+
+                      <v-card-text>
+                        {{ user.id }}
+                      </v-card-text>
+                    </div>
+                  </v-expand-transition>
                 </v-card>
               </v-col>
             </v-row>
@@ -63,6 +89,7 @@ import * as Firebase from '../firebase_config';
 export default {
   data: () => ({
     users: [],
+    show: false,
   }),
   async mounted() {
     Firebase.db
@@ -88,6 +115,7 @@ export default {
                 if (Object.is(arr.length - 1, key)) {
                   let o = { id: doc.id, data: doc.data() };
                   o.data.tags = tags;
+                  o.data.showDetails = false;
                   this.users.push(o);
                 }
               });
