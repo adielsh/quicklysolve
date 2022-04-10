@@ -8,9 +8,8 @@
 
       <v-spacer></v-spacer>
       <!-- <v-toolbar-title style="text-align:center">{{appTitle }}</v-toolbar-title> -->
-      <v-btn v-if="!$store.state.currentUser" @click="googleLogin()"
-        >SignIn with Google</v-btn
-      >
+      <v-btn v-if="!$store.state.currentUser" @click="googleLogin()">
+      SignIn</v-btn>
       <v-btn v-if="!!$store.state.currentUser" @click="signOut()">Logout</v-btn>
       <!--<v-toolbar-side-icon></v-toolbar-side-icon>-->
     </v-app-bar>
