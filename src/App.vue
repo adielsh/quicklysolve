@@ -1,7 +1,5 @@
 <template>
   <v-app>
-
-
     <header-component />
     <router-view />
   </v-app>

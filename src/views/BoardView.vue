@@ -23,11 +23,23 @@
                 >
                   <v-card-text>
                     <div>{{ user.data.name }}</div>
+                    <div class="text-center">
+                      <v-badge
+                        :color="user.data.isBusy ? 'green' : 'red'"
+                        content=""
+                        left
+                        transition="slide-x-transition"
+                        overlap
+                      >
+                        <v-icon color="grey lighten-1" xs> mdi-account </v-icon>
+                      </v-badge>
+                    </div>
                     <div>{{ user.data.isBusy }}</div>
                     <div>{{ user.id }}</div>
                     <div>{{ user.data.type }}</div>
                     <div v-if="user.data.tags">
                       <v-chip
+                        style="margin: 3px"
                         v-for="(t, i) in user.data.tags"
                         :key="i"
                         :color="getRandomColor()"
