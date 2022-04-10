@@ -89,8 +89,6 @@
                   </v-card-text>
 
                   <v-card-actions>
-                    <v-btn color="orange lighten-2" text> פרטים </v-btn>
-
                     <v-spacer></v-spacer>
 
                     <v-btn
