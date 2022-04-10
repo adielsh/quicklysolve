@@ -23,6 +23,7 @@
                 >
                   <v-card-text>
                     <div>{{ user.data.name }}</div>
+                    <div>{{ user.data.isBusy }}</div>
                     <div>{{ user.id }}</div>
                     <div>{{ user.data.type }}</div>
                     <div v-if="user.data.tags">

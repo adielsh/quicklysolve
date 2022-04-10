@@ -27,6 +27,12 @@
         multiple
         solo
       ></v-combobox>
+      <v-switch
+        v-model="profile.isBusy"
+        label="האם תפוס"
+        color="success"
+        hide-details
+      ></v-switch>
 
       <v-btn color="success" class="mr-4" @click="saveProfile"> שמור </v-btn>
     </v-form>
@@ -74,13 +80,10 @@ export default {
       });
       console.log(tagsToAddToGlobal);
       console.log(this.userUpdatedTags);
-      Firebase.db.collection('users').doc(this.profile.userId).update(
-        {
-          name: this.profile.name,
-          tags: this.userUpdatedTags,
-        },
-        { merge: true }
-      );
+      Firebase.db
+        .collection('users')
+        .doc(this.profile.userId)
+        .update(this.profile, { merge: true });
     },
     async getTags() {
       const snapshot = await Firebase.db.collection('tags').get();
