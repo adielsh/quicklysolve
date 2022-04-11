@@ -107,7 +107,7 @@
                       <v-divider></v-divider>
 
                       <v-card-text>
-                        {{ user.id }}
+                        <a :href="'mailto:' + user.id">פנה למורה</a>
                       </v-card-text>
                     </div>
                   </v-expand-transition>

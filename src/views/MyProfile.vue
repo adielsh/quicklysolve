@@ -49,7 +49,7 @@
       </v-combobox>
       <v-switch
         v-model="profile.isBusy"
-        :label="profile.isBusy ? 'תפוס' : 'פנוי'"
+        :label="profile.isBusy ? 'פנוי' : 'תפוס'"
         :color="getSwitchColor"
         hide-details
       ></v-switch>
