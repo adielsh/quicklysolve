@@ -9,7 +9,8 @@
       <v-spacer></v-spacer>
       <!-- <v-toolbar-title style="text-align:center">{{appTitle }}</v-toolbar-title> -->
       <v-btn v-if="!$store.state.currentUser" @click="googleLogin()">
-      SignIn</v-btn>
+        SignIn</v-btn
+      >
       <v-btn v-if="!!$store.state.currentUser" @click="signOut()">Logout</v-btn>
       <!--<v-toolbar-side-icon></v-toolbar-side-icon>-->
     </v-app-bar>
@@ -86,10 +87,10 @@ export default {
           // The signed-in user info.
           var user = result.user;
           console.log(token, user);
-          console.log(Firebase.auth().currentUser, '***************8');
 
           this.$store.commit('SET_LOGGEDIN', user);
           this.$router.push({ path: '/board' });
+          console.log(Firebase.auth().currentUser, '***************8');
 
           Firebase.db
             .collection('users')
@@ -97,10 +98,13 @@ export default {
             //////////////////////
             //////////////////////
             .doc(this.$store.state.currentUser.email)
-            .update({
-              userId: this.$store.state.currentUser.email,
-              created_at: new Date(),
-            })
+            .set(
+              {
+                userId: this.$store.state.currentUser.email,
+                created_at: new Date(),
+              },
+              { merge: true }
+            )
             .then(() => {
               console.log('Document successfully written!');
             })
