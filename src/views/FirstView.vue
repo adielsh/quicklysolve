@@ -1,7 +1,10 @@
-<template><div>first</div></template>
+<template><div>first time view</div></template>
 
 <script>
 export default {
-  name: 'firstConfigView',
+  name: 'firstView',
+  created() {
+    console.log('first view.......');
+  },
 };
 </script>

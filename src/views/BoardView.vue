@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div>
-      ****{{ isFirstTime }}*** aa
+      ****{{ isFirstTime }}***
       <v-row v-if="!isFirstTime" style="margin-top: 60px">
         <v-col cols="12" sm="12" offset-sm="12">
           <v-card class="wrap-cards">
@@ -121,8 +121,6 @@
         </v-col>
       </v-row>
     </div>
-
-    <div v-if="isFirstTime"></div>
   </v-container>
 </template>
 
@@ -136,7 +134,7 @@ export default {
     desiredTags: [],
   }),
   async mounted() {
-    if (this.isFirstTime) {
+    if (this.isFirstTime()) {
       this.$router.push('firstView');
       return;
     }
@@ -189,6 +187,11 @@ export default {
     //     //return !it.id.indexOf(val);
     //   });
     // },
+    isFirstTime() {
+      return (
+        this.$store.state.currentUser && !this.$store.state.currentUser.type
+      );
+    },
     getAllTags() {
       //todo: get all tags for db
     },
@@ -209,11 +212,6 @@ export default {
     },
   },
   computed: {
-    isFirstTime() {
-      return (
-        this.$store.state.currentUser && !this.$store.state.currentUser.type
-      );
-    },
     filteredTeachers() {
       var that = this;
       return this.teachers.filter((t) => {
