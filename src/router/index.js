@@ -24,8 +24,8 @@ const routes = [
       import(/* webpackChunkName: "about" */ '../views/MyProfile.vue'),
   },
   {
-    path: '/FirstView',
-    name: 'FirstView',
+    path: '/firstView',
+    name: 'firstView',
     meta: {
       requiresAuth: true,
     },
@@ -71,9 +71,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   if (requiresAuth && !currentUser) next('home');
-  else if (requiresAuth && currentUser && !currentUser.type) {
-    next('firstConfig');
-  } else next();
+  else next();
 });
 
 export default router;

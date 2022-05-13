@@ -1,123 +1,128 @@
 <template>
   <v-container>
-    <v-row style="margin-top: 60px">
-      <v-col cols="12" sm="12" offset-sm="12">
-        <v-card class="wrap-cards">
-          <v-container fluid>
-            <v-row>
-              <v-col cols="12" md="4">
-                <!-- <v-text-field
+    <div>
+      ****{{ isFirstTime }}*** aa
+      <v-row v-if="!isFirstTime" style="margin-top: 60px">
+        <v-col cols="12" sm="12" offset-sm="12">
+          <v-card class="wrap-cards">
+            <v-container fluid>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <!-- <v-text-field
                   label="חיפוש לפי תג"
                   v-model="searchStr"
                   clearable
                 ></v-text-field> -->
 
-                <v-combobox
-                  :items="$store.state.allTags"
-                  v-model="desiredTags"
-                  chips
-                  label="חיפוש לפי תגים"
-                  multiple
-                  solo
-                >
-                  <template v-slot:selection="data">
-                    <v-chip
-                      class="ma-2"
-                      close
-                      label
-                      outlined
-                      :key="JSON.stringify(data.item)"
-                      v-bind="data.attrs"
-                      :input-value="data.selected"
-                      close
-                      @click:close="data.parent.selectItem(data.item)"
-                    >
-                      <!-- <v-avatar
+                  <v-combobox
+                    :items="$store.state.allTags"
+                    v-model="desiredTags"
+                    chips
+                    label="חיפוש לפי תגים"
+                    multiple
+                    solo
+                  >
+                    <template v-slot:selection="data">
+                      <v-chip
+                        class="ma-2"
+                        close
+                        label
+                        outlined
+                        :key="JSON.stringify(data.item)"
+                        v-bind="data.attrs"
+                        :input-value="data.selected"
+                        close
+                        @click:close="data.parent.selectItem(data.item)"
+                      >
+                        <!-- <v-avatar
               class="accent white--text"
               left
               v-text="data.item.slice(0, 1).toUpperCase()"
             ></v-avatar> -->
-                      {{ data.item }}
-                    </v-chip>
-                  </template>
-                </v-combobox>
-              </v-col>
-              <v-col
-                v-for="(user, i) in filteredTeachers"
-                :key="i"
-                class="d-flex child-flex"
-                cols="12"
-                xs="12"
-              >
-                <v-card
-                  class="mx-auto"
-                  max-width="500"
-                  elevation="9"
-                  shaped
-                  outlined
-                  flat
-                  tile
+                        {{ data.item }}
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                </v-col>
+                <v-col
+                  v-for="(user, i) in filteredTeachers"
+                  :key="i"
+                  class="d-flex child-flex"
+                  cols="12"
+                  xs="12"
                 >
-                  <v-card-title>
-                    <div class="text-center">
-                      <v-badge
-                        :color="user.data.isBusy ? 'green' : 'red'"
-                        content=""
-                        left
-                        transition="slide-x-transition"
-                        overlap
+                  <v-card
+                    class="mx-auto"
+                    max-width="500"
+                    elevation="9"
+                    shaped
+                    outlined
+                    flat
+                    tile
+                  >
+                    <v-card-title>
+                      <div class="text-center">
+                        <v-badge
+                          :color="user.data.isBusy ? 'green' : 'red'"
+                          content=""
+                          left
+                          transition="slide-x-transition"
+                          overlap
+                        >
+                          <v-avatar color="blue">
+                            <v-icon dark> mdi-account-circle </v-icon>
+                          </v-avatar>
+                        </v-badge>
+                        {{ user.data.name }}
+                      </div>
+                    </v-card-title>
+                    <v-card-text>
+                      <div class="text-center"></div>
+                      <div v-if="user.data.tags">
+                        <v-chip
+                          style="margin: 3px"
+                          v-for="(t, i) in user.data.tags"
+                          :key="i"
+                          :color="getRandomColor()"
+                          outlined
+                          >{{ t }}</v-chip
+                        >
+                      </div>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        icon
+                        @click="user.data.showDetails = !user.data.showDetails"
                       >
-                        <v-avatar color="blue">
-                          <v-icon dark> mdi-account-circle </v-icon>
-                        </v-avatar>
-                      </v-badge>
-                      {{ user.data.name }}
-                    </div>
-                  </v-card-title>
-                  <v-card-text>
-                    <div class="text-center"></div>
-                    <div v-if="user.data.tags">
-                      <v-chip
-                        style="margin: 3px"
-                        v-for="(t, i) in user.data.tags"
-                        :key="i"
-                        :color="getRandomColor()"
-                        outlined
-                        >{{ t }}</v-chip
-                      >
-                    </div>
-                  </v-card-text>
+                        <v-icon>{{
+                          user.data.showDetails
+                            ? 'mdi-chevron-up'
+                            : 'mdi-chevron-down'
+                        }}</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                    <v-expand-transition>
+                      <div v-show="user.data.showDetails">
+                        <v-divider></v-divider>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
+                        <v-card-text>
+                          <a :href="'mailto:' + user.id">פנה למורה</a>
+                        </v-card-text>
+                      </div>
+                    </v-expand-transition>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
 
-                    <v-btn
-                      icon
-                      @click="user.data.showDetails = !user.data.showDetails"
-                    >
-                      <v-icon>{{
-                        user.data.showDetails
-                          ? 'mdi-chevron-up'
-                          : 'mdi-chevron-down'
-                      }}</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                  <v-expand-transition>
-                    <div v-show="user.data.showDetails">
-                      <v-divider></v-divider>
-
-                      <v-card-text>
-                        <a :href="'mailto:' + user.id">פנה למורה</a>
-                      </v-card-text>
-                    </div>
-                  </v-expand-transition>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
+    <div v-if="isFirstTime"></div>
   </v-container>
 </template>
 
@@ -131,6 +136,10 @@ export default {
     desiredTags: [],
   }),
   async mounted() {
+    if (this.isFirstTime) {
+      this.$router.push('firstView');
+      return;
+    }
     Firebase.db
       .collection('users')
       .where('type', '==', 'TEACHER')
@@ -200,6 +209,11 @@ export default {
     },
   },
   computed: {
+    isFirstTime() {
+      return (
+        this.$store.state.currentUser && !this.$store.state.currentUser.type
+      );
+    },
     filteredTeachers() {
       var that = this;
       return this.teachers.filter((t) => {
